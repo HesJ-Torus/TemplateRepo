@@ -1,0 +1,70 @@
+---
+import theme from '../config/theme.json';
+import business from '../content/business.json';
+import '../styles/global.css';
+
+const { title = business.name, description = business.metaDescription } = Astro.props;
+
+const c = theme.colors;
+const fontFamilies = [...new Set([theme.fonts.heading, theme.fonts.body])]
+  .map((f) => `family=${encodeURIComponent(f)}:wght@400;500;600;700`)
+  .join('&');
+const fontsUrl = `https://fonts.googleapis.com/css2?${fontFamilies}&display=swap`;
+
+const cssVars = `
+  --paper:${c.paper}; --ink:${c.ink}; --brand:${c.brand}; --accent:${c.accent};
+  --line:${c.line}; --on-brand:${c.onBrand}; --radius:${theme.radius};
+  --font-heading:'${theme.fonts.heading}', system-ui, sans-serif;
+  --font-body:'${theme.fonts.body}', Georgia, serif;
+  --heading-weight:${theme.fonts.headingWeight};
+`;
+
+// Favicon: the business's initials on the brand colour, generated from settings.
+const initials = business.name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+const favicon = `data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="${c.brand}"/><text x="32" y="42" font-family="sans-serif" font-size="28" font-weight="700" fill="${c.onBrand}" text-anchor="middle">${initials}</text></svg>`
+)}`;
+
+const canonical = new URL(Astro.url.pathname, theme.siteUrl).href;
+const ogImage = new URL('/images/hero.svg', theme.siteUrl).href;
+
+// Structured data so Google understands this is a local business.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: business.name,
+  description: business.metaDescription,
+  telephone: business.phone,
+  email: business.email,
+  address: business.address,
+  areaServed: business.area,
+  url: theme.siteUrl,
+  openingHours: business.hours.map((h) => `${h.day}: ${h.times}`),
+};
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={favicon} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="theme-color" content={c.brand} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontsUrl} />
+    <style set:html={`:root{${cssVars}}`}></style>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>

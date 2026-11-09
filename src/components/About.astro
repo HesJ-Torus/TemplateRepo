@@ -1,0 +1,21 @@
+---
+import home from '../content/home.json';
+const a = home.about;
+const paragraphs = a.body.split(/\n\s*\n/).filter(Boolean);
+---
+<section class="section" id="about">
+  <div class="wrap grid">
+    {a.image && <img src={a.image} alt={a.imageAlt} width="1200" height="900" loading="lazy" />}
+    <div>
+      <h2>{a.heading}</h2>
+      <div class="body">{paragraphs.map((p) => <p>{p}</p>)}</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); }
+  .body { margin-top: 1.5rem; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+</style>

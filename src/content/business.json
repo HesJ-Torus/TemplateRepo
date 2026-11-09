@@ -1,0 +1,23 @@
+{
+  "name": "Corve Dale Joinery",
+  "tagline": "Bespoke doors, windows and kitchens, made in our Shropshire workshop",
+  "metaDescription": "Family joinery in Corve Dale, Shropshire. Handmade oak doors, sash windows, kitchens and staircases for homes across Ludlow, Bridgnorth and the Clee Hills.",
+  "logo": "",
+  "phone": "01584 000000",
+  "email": "hello@example.co.uk",
+  "address": "Unit 3, Corve Dale Workshops, Shropshire SY7 0XX",
+  "area": "Ludlow, Bridgnorth, Craven Arms, Church Stretton and the Clee Hills",
+  "hours": [
+    { "day": "Monday", "times": "8am – 5pm" },
+    { "day": "Tuesday", "times": "8am – 5pm" },
+    { "day": "Wednesday", "times": "8am – 5pm" },
+    { "day": "Thursday", "times": "8am – 5pm" },
+    { "day": "Friday", "times": "8am – 4pm" },
+    { "day": "Saturday", "times": "By appointment" },
+    { "day": "Sunday", "times": "Closed" }
+  ],
+  "social": {
+    "facebook": "",
+    "instagram": ""
+  }
+}

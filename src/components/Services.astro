@@ -1,0 +1,24 @@
+---
+import home from '../content/home.json';
+const s = home.services;
+---
+<section class="section" id="services">
+  <div class="wrap">
+    <h2 class="section-head">{s.heading}</h2>
+    <dl class="list">
+      {s.items.map((item) => (
+        <div class="row">
+          <dt><h3>{item.title}</h3></dt>
+          <dd>{item.description}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style>
+  .list { margin: 0; border-top: 2px solid var(--ink); }
+  .row { display: grid; grid-template-columns: minmax(10rem, 1fr) 2fr; gap: 2rem; padding-block: 1.6rem; border-bottom: 1px solid var(--line); }
+  dd { margin: 0; max-width: 56ch; }
+  @media (max-width: 640px) { .row { grid-template-columns: 1fr; gap: .4rem; } }
+</style>

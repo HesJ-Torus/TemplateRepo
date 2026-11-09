@@ -1,0 +1,62 @@
+---
+import business from '../content/business.json';
+import home from '../content/home.json';
+import theme from '../config/theme.json';
+
+const h = home.hero;
+const tel = business.phone.replace(/\s+/g, '');
+---
+<section class="hero">
+  <div class="wrap grid">
+    <div class="copy">
+      <h1>{h.heading}</h1>
+      <p class="intro">{h.intro}</p>
+      {business.phone && (
+        <div class="phone-block">
+          <a class="phone" href={`tel:${tel}`}>{business.phone}</a>
+          <p class="today" data-today hidden></p>
+        </div>
+      )}
+      {theme.sections.contact && h.buttonText && <a class="button button--ghost" href="#contact">{h.buttonText}</a>}
+    </div>
+    {h.image && (
+      <figure class="photo">
+        <img src={h.image} alt={h.imageAlt} width="1200" height="1400" fetchpriority="high" />
+      </figure>
+    )}
+  </div>
+</section>
+
+<script define:vars={{ hours: business.hours }}>
+  // Shows today's opening hours under the phone number.
+  const el = document.querySelector('[data-today]');
+  if (el && hours?.length) {
+    const day = new Date().toLocaleDateString('en-GB', { weekday: 'long' });
+    const match = hours.find((x) => x.day.toLowerCase() === day.toLowerCase());
+    if (match) {
+      const closed = /closed/i.test(match.times);
+      el.textContent = closed ? `Closed today (${day})` : `Open today, ${match.times}`;
+      el.hidden = false;
+    }
+  }
+</script>
+
+<style>
+  .hero { padding-block: clamp(2.5rem, 6vw, 5rem) clamp(4rem, 8vw, 6.5rem); }
+  .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+  .intro { font-size: 1.2rem; margin-top: 1.5rem; max-width: 42ch; }
+  .phone-block { margin: 2.25rem 0 2rem; padding-left: 1.25rem; border-left: 4px solid var(--accent); }
+  .phone {
+    display: inline-block; font-family: var(--font-heading); font-weight: var(--heading-weight);
+    font-size: clamp(2rem, 4.6vw, 3.4rem); letter-spacing: -0.02em; line-height: 1;
+    text-decoration: none; color: var(--brand);
+  }
+  .phone:hover { color: var(--ink); }
+  .today { margin: .6rem 0 0; font-family: var(--font-heading); font-weight: 500; }
+  .photo { margin: 0; }
+  .photo img { width: 100%; aspect-ratio: 6 / 7; object-fit: cover; border-radius: var(--radius); }
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    .photo img { aspect-ratio: 4 / 3; }
+  }
+</style>

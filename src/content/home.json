@@ -1,0 +1,44 @@
+{
+  "hero": {
+    "heading": "Joinery made to fit the house, not the catalogue",
+    "intro": "We measure, make and fit every piece ourselves, from a single replacement sash to a full oak kitchen.",
+    "buttonText": "Ask for a quote",
+    "image": "/images/hero.svg",
+    "imageAlt": "Oak front door being fitted to a stone cottage"
+  },
+  "services": {
+    "heading": "What we make",
+    "items": [
+      { "title": "Doors", "description": "Solid oak and painted front doors, stable doors and internal doors, hung and finished on site." },
+      { "title": "Windows", "description": "Timber sash and casement windows, including like-for-like replacements for listed buildings." },
+      { "title": "Kitchens", "description": "Freestanding and fitted kitchens built in the workshop to your room's exact measurements." },
+      { "title": "Staircases", "description": "New staircases, balustrades and repairs to old treads and handrails." }
+    ]
+  },
+  "about": {
+    "heading": "A small workshop, run by the people who do the work",
+    "body": "Corve Dale Joinery started in 1998 in a converted cattle shed outside Ludlow. Today it is still three of us: we take the call, visit your home, make the piece and fit it.\n\nWe use British oak and sustainably sourced softwoods, and we're happy to match old mouldings when you're restoring a period property.",
+    "image": "/images/about.svg",
+    "imageAlt": "Joiner planing a length of oak at the workbench"
+  },
+  "gallery": {
+    "heading": "Recent work",
+    "images": [
+      { "image": "/images/gallery-1.svg", "alt": "Painted sash windows on a Georgian townhouse", "caption": "Sash windows, Ludlow" },
+      { "image": "/images/gallery-2.svg", "alt": "Oak kitchen with a butler sink", "caption": "Oak kitchen, Clee St Margaret" },
+      { "image": "/images/gallery-3.svg", "alt": "Green stable door on a farmhouse", "caption": "Stable door, Diddlebury" },
+      { "image": "/images/gallery-4.svg", "alt": "Oak staircase with turned spindles", "caption": "Staircase, Bridgnorth" }
+    ]
+  },
+  "reviews": {
+    "heading": "What customers say",
+    "items": [
+      { "quote": "They matched the old window mouldings exactly. You can't tell which ones are new.", "name": "Sarah, Ludlow" },
+      { "quote": "Turned up when they said, left the place tidy, and the door is beautiful.", "name": "Mike, Craven Arms" }
+    ]
+  },
+  "contact": {
+    "heading": "Get in touch",
+    "intro": "Tell us what you need and roughly where you are. We'll get back to you within two working days."
+  }
+}

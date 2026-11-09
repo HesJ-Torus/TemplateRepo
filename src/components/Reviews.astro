@@ -1,0 +1,29 @@
+---
+import home from '../content/home.json';
+const r = home.reviews;
+---
+{r.items.length > 0 && (
+  <section class="section" id="reviews">
+    <div class="wrap">
+      <h2 class="section-head">{r.heading}</h2>
+      <div class="grid">
+        {r.items.map((item) => (
+          <figure>
+            <blockquote><p>{item.quote}</p></blockquote>
+            <figcaption>{item.name}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(2rem, 4vw, 4rem); }
+  figure { margin: 0; }
+  blockquote { margin: 0; }
+  blockquote p { font-family: var(--font-heading); font-weight: 500; font-size: clamp(1.3rem, 2.2vw, 1.6rem); line-height: 1.35; letter-spacing: -0.01em; }
+  blockquote p::before { content: '“'; color: var(--accent); }
+  blockquote p::after { content: '”'; color: var(--accent); }
+  figcaption { margin-top: .5rem; }
+</style>

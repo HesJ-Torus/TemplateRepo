@@ -1,0 +1,16 @@
+{
+  "name": "studio-starter",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "new-client": "node scripts/new-client.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.4.7",
+    "@astrojs/sitemap": "^3.7.4"
+  }
+}

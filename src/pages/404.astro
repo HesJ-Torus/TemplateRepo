@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import business from '../content/business.json';
+---
+<Base title={`Page not found | ${business.name}`}>
+  <Header />
+  <main id="main" class="wrap missing">
+    <h1>This page doesn't exist</h1>
+    <p>It may have moved. Head back to the home page to find what you need.</p>
+    <a class="button" href="/">Go to the home page</a>
+  </main>
+  <Footer />
+</Base>
+<style>
+  .missing { padding-block: clamp(4rem, 12vw, 9rem); }
+  .missing p { margin-top: 1.25rem; }
+</style>

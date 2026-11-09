@@ -1,0 +1,74 @@
+---
+import business from '../content/business.json';
+import home from '../content/home.json';
+import theme from '../config/theme.json';
+
+const c = home.contact;
+const action = theme.contactForm.action;
+const tel = business.phone.replace(/\s+/g, '');
+---
+<section class="section contact" id="contact">
+  <div class="wrap grid">
+    <div>
+      <h2>{c.heading}</h2>
+      <p class="intro">{c.intro}</p>
+      <ul class="details">
+        {business.phone && <li><span>Phone</span><a href={`tel:${tel}`}>{business.phone}</a></li>}
+        {business.email && <li><span>Email</span><a href={`mailto:${business.email}`}>{business.email}</a></li>}
+        {business.address && <li><span>Address</span>{business.address}</li>}
+        {business.area && <li><span>Areas we cover</span>{business.area}</li>}
+      </ul>
+      {action && business.hours.length > 0 && (
+        <table class="hours">
+          <caption>Opening hours</caption>
+          <tbody>
+            {business.hours.map((h) => <tr><th scope="row">{h.day}</th><td>{h.times}</td></tr>)}
+          </tbody>
+        </table>
+      )}
+    </div>
+
+    {action ? (
+      <form class="form" action={action} method="POST">
+        <label>Your name<input name="name" autocomplete="name" required /></label>
+        <label>Email<input type="email" name="email" autocomplete="email" required /></label>
+        <label>Phone (optional)<input type="tel" name="phone" autocomplete="tel" /></label>
+        <label>How can we help?<textarea name="message" rows="6" required></textarea></label>
+        <input type="text" name="_gotcha" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="button" type="submit">Send message</button>
+      </form>
+    ) : (
+      <div class="hours-panel">
+        {business.hours.length > 0 && (
+        <table class="hours">
+          <caption>Opening hours</caption>
+          <tbody>
+            {business.hours.map((h) => <tr><th scope="row">{h.day}</th><td>{h.times}</td></tr>)}
+          </tbody>
+        </table>
+      )}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+  .intro { margin-top: 1.25rem; }
+  .details { list-style: none; padding: 0; margin: 2rem 0; display: grid; gap: 1rem; }
+  .details span { display: block; font-family: var(--font-heading); font-weight: 600; font-size: .9rem; color: var(--brand); }
+  .hours { border-collapse: collapse; width: 100%; max-width: 26rem; }
+  .hours caption { text-align: left; font-family: var(--font-heading); font-weight: 600; font-size: .9rem; color: var(--brand); padding-bottom: .4rem; }
+  .hours th, .hours td { text-align: left; padding: .45rem 0; border-bottom: 1px solid var(--line); font-weight: 400; }
+  .hours-panel { background: #fff; padding: clamp(1.5rem, 3vw, 2.25rem); border-radius: var(--radius); border: 1px solid var(--line); }
+  .hours-panel .hours { max-width: none; }
+  .form { display: grid; gap: 1.1rem; background: #fff; padding: clamp(1.5rem, 3vw, 2.25rem); border-radius: var(--radius); border: 1px solid var(--line); }
+  label { display: grid; gap: .35rem; font-family: var(--font-heading); font-weight: 500; }
+  input, textarea {
+    font: inherit; font-family: var(--font-body); color: var(--ink);
+    padding: .7rem .8rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper);
+  }
+  input:focus, textarea:focus { outline: 2px solid var(--brand); outline-offset: 0; border-color: var(--brand); }
+  .form .button { justify-self: start; cursor: pointer; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+</style>

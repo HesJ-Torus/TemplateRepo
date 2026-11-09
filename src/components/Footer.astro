@@ -1,0 +1,26 @@
+---
+import business from '../content/business.json';
+import theme from '../config/theme.json';
+const year = new Date().getFullYear();
+const social = Object.entries(business.social).filter(([, url]) => url);
+---
+<footer class="site-footer">
+  <div class="wrap bar">
+    <p>© {year} {business.name}</p>
+    {social.length > 0 && (
+      <ul>
+        {social.map(([name, url]) => <li><a href={url} rel="noopener">{name[0].toUpperCase() + name.slice(1)}</a></li>)}
+      </ul>
+    )}
+    {theme.credit.show && <p class="credit"><a href={theme.credit.url}>{theme.credit.text}</a></p>}
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--ink); color: var(--paper); padding-block: 2.5rem; font-size: .95rem; }
+  .bar { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; }
+  p { margin: 0; }
+  ul { list-style: none; display: flex; gap: 1.25rem; margin: 0; padding: 0; }
+  a:hover { color: var(--accent); }
+  .credit { margin-left: auto; opacity: .75; }
+</style>

@@ -1,0 +1,174 @@
+# Pages CMS config: this decides what the CLIENT can edit.
+# Only text and photos are listed here. Design settings (src/config/theme.json)
+# are deliberately left out, so clients can't change colours, fonts or layout.
+
+media:
+  - name: images
+    label: Photos
+    input: public/images
+    output: /images
+    rename: safe
+    extensions: [jpg, jpeg, png, webp, svg]
+
+content:
+  - name: business
+    label: Business details
+    type: file
+    path: src/content/business.json
+    format: json
+    fields:
+      - name: name
+        label: Business name
+        type: string
+        required: true
+      - name: tagline
+        label: Short tagline (shown in Google results and the browser tab)
+        type: string
+      - name: metaDescription
+        label: Google description (1–2 sentences about what you do and where)
+        type: text
+      - name: logo
+        type: string
+        hidden: true
+      - name: phone
+        label: Phone number
+        type: string
+      - name: email
+        label: Email address
+        type: string
+      - name: address
+        label: Address
+        type: string
+      - name: area
+        label: Areas you cover
+        type: string
+      - name: hours
+        label: Opening hours
+        type: object
+        list: true
+        fields:
+          - name: day
+            label: Day
+            type: string
+          - name: times
+            label: Hours (e.g. 9am – 5pm, or Closed)
+            type: string
+      - name: social
+        label: Social media links
+        type: object
+        fields:
+          - name: facebook
+            label: Facebook page link
+            type: string
+          - name: instagram
+            label: Instagram link
+            type: string
+
+  - name: home
+    label: Home page
+    type: file
+    path: src/content/home.json
+    format: json
+    fields:
+      - name: hero
+        label: Top of the page
+        type: object
+        fields:
+          - name: heading
+            label: Main heading
+            type: string
+          - name: intro
+            label: Intro sentence
+            type: text
+          - name: buttonText
+            label: Button text
+            type: string
+          - name: image
+            label: Main photo
+            type: image
+          - name: imageAlt
+            label: Describe the photo (for blind visitors and Google)
+            type: string
+      - name: services
+        label: Services
+        type: object
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: items
+            label: Services
+            type: object
+            list: true
+            fields:
+              - name: title
+                label: Service name
+                type: string
+              - name: description
+                label: Description
+                type: text
+      - name: about
+        label: About us
+        type: object
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: body
+            label: Text (leave a blank line between paragraphs)
+            type: text
+          - name: image
+            label: Photo
+            type: image
+          - name: imageAlt
+            label: Describe the photo
+            type: string
+      - name: gallery
+        label: Photo gallery
+        type: object
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: images
+            label: Photos
+            type: object
+            list: true
+            fields:
+              - name: image
+                label: Photo
+                type: image
+              - name: alt
+                label: Describe the photo
+                type: string
+              - name: caption
+                label: Caption (optional)
+                type: string
+      - name: reviews
+        label: Customer reviews
+        type: object
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: items
+            label: Reviews
+            type: object
+            list: true
+            fields:
+              - name: quote
+                label: What they said
+                type: text
+              - name: name
+                label: Name and town (e.g. Sarah, Ludlow)
+                type: string
+      - name: contact
+        label: Contact section
+        type: object
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: intro
+            label: Intro text
+            type: text

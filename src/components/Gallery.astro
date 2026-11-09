@@ -1,0 +1,24 @@
+---
+import home from '../content/home.json';
+const g = home.gallery;
+---
+<section class="section" id="work">
+  <div class="wrap">
+    <h2 class="section-head">{g.heading}</h2>
+    <div class="grid">
+      {g.images.map((img) => (
+        <figure>
+          <img src={img.image} alt={img.alt} width="900" height="1100" loading="lazy" />
+          {img.caption && <figcaption>{img.caption}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
+  figure { margin: 0; }
+  img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); }
+  figcaption { margin-top: .6rem; font-family: var(--font-heading); font-weight: 500; font-size: .95rem; }
+</style>

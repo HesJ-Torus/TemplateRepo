@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import About from '../components/About.astro';
+import Gallery from '../components/Gallery.astro';
+import Reviews from '../components/Reviews.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import theme from '../config/theme.json';
+import business from '../content/business.json';
+
+const s = theme.sections;
+---
+<Base title={`${business.name} | ${business.tagline}`}>
+  <Header />
+  <main id="main">
+    <Hero />
+    {s.services && <Services />}
+    {s.about && <About />}
+    {s.gallery && <Gallery />}
+    {s.reviews && <Reviews />}
+    {s.contact && <Contact />}
+  </main>
+  <Footer />
+</Base>
