@@ -1,6 +1,6 @@
 {
   "hero": {
-    "heading": "Joinery made to fit the house, not the catalogue",
+    "heading": "Joinery made to fit the house, not the catalogue bananas",
     "intro": "We measure, make and fit every piece ourselves, from a single replacement sash to a full oak kitchen.",
     "buttonText": "Ask for a quote",
     "image": "/images/hero.svg",
@@ -9,10 +9,22 @@
   "services": {
     "heading": "What we make",
     "items": [
-      { "title": "Doors", "description": "Solid oak and painted front doors, stable doors and internal doors, hung and finished on site." },
-      { "title": "Windows", "description": "Timber sash and casement windows, including like-for-like replacements for listed buildings." },
-      { "title": "Kitchens", "description": "Freestanding and fitted kitchens built in the workshop to your room's exact measurements." },
-      { "title": "Staircases", "description": "New staircases, balustrades and repairs to old treads and handrails." }
+      {
+        "title": "Doors",
+        "description": "Solid oak and painted front doors, stable doors and internal doors, hung and finished on site."
+      },
+      {
+        "title": "Windows",
+        "description": "Timber sash and casement windows, including like-for-like replacements for listed buildings."
+      },
+      {
+        "title": "Kitchens",
+        "description": "Freestanding and fitted kitchens built in the workshop to your room's exact measurements."
+      },
+      {
+        "title": "Staircases",
+        "description": "New staircases, balustrades and repairs to old treads and handrails."
+      }
     ]
   },
   "about": {
@@ -24,17 +36,39 @@
   "gallery": {
     "heading": "Recent work",
     "images": [
-      { "image": "/images/gallery-1.svg", "alt": "Painted sash windows on a Georgian townhouse", "caption": "Sash windows, Ludlow" },
-      { "image": "/images/gallery-2.svg", "alt": "Oak kitchen with a butler sink", "caption": "Oak kitchen, Clee St Margaret" },
-      { "image": "/images/gallery-3.svg", "alt": "Green stable door on a farmhouse", "caption": "Stable door, Diddlebury" },
-      { "image": "/images/gallery-4.svg", "alt": "Oak staircase with turned spindles", "caption": "Staircase, Bridgnorth" }
+      {
+        "image": "/images/gallery-1.svg",
+        "alt": "Painted sash windows on a Georgian townhouse",
+        "caption": "Sash windows, Ludlow"
+      },
+      {
+        "image": "/images/gallery-2.svg",
+        "alt": "Oak kitchen with a butler sink",
+        "caption": "Oak kitchen, Clee St Margaret"
+      },
+      {
+        "image": "/images/gallery-3.svg",
+        "alt": "Green stable door on a farmhouse",
+        "caption": "Stable door, Diddlebury"
+      },
+      {
+        "image": "/images/gallery-4.svg",
+        "alt": "Oak staircase with turned spindles",
+        "caption": "Staircase, Bridgnorth"
+      }
     ]
   },
   "reviews": {
     "heading": "What customers say",
     "items": [
-      { "quote": "They matched the old window mouldings exactly. You can't tell which ones are new.", "name": "Sarah, Ludlow" },
-      { "quote": "Turned up when they said, left the place tidy, and the door is beautiful.", "name": "Mike, Craven Arms" }
+      {
+        "quote": "They matched the old window mouldings exactly. You can't tell which ones are new.",
+        "name": "Sarah, Ludlow"
+      },
+      {
+        "quote": "Turned up when they said, left the place tidy, and the door is beautiful.",
+        "name": "Mike, Craven Arms"
+      }
     ]
   },
   "contact": {
