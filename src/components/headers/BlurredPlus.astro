@@ -1,0 +1,294 @@
+---
+// "blurredPlus" header: the "blurred" design (floating frosted-glass boxes) plus a
+// Services dropdown. On desktop, clicking "Services" opens a small panel listing each
+// service from home.json, which links straight to that service on the page.
+// On phones it's one frosted bar across the top with a menu button that opens
+// a full-screen menu (no dropdown there, "Services" is a normal link). Both boxes slide
+// away when you scroll down and return when you scroll up. Rendered outside
+// #smooth-wrapper (see Header.astro).
+import business from '../../content/business.json';
+import home from '../../content/home.json';
+import theme from '../../config/theme.json';
+import { serviceId } from '../../utils/slug.js';
+
+const s = theme.sections;
+// Dropdown entries: one per service, linking to its row in the Services section
+const serviceLinks = (home.services?.items ?? [])
+  .filter((item) => item.title)
+  .map((item, i) => ({ href: `#${serviceId(item.title, i)}`, label: item.title }));
+const links = [
+  s.services && { href: '#services', label: 'Services' },
+  s.about && { href: '#about', label: 'About' },
+  s.gallery && { href: '#work', label: 'Our work' },
+  s.contact && { href: '#contact', label: 'Contact' },
+].filter(Boolean);
+
+// Desktop: "Contact" lives in its own box, so leave it out of the main links
+const deskLinks = links.filter((l) => l.href !== '#contact');
+const tel = business.phone.replace(/\s+/g, '');
+// Contact box goes to the contact section, or rings the phone if that section is off
+const contact = s.contact
+  ? { href: '#contact', label: 'Contact' }
+  : business.phone && { href: `tel:${tel}`, label: `Call ${business.phone}` };
+---
+<header class="site-header" data-fixed-header>
+  <div class="bar glass" data-bar>
+    <a class="logo" href="/">
+      {business.logo
+        ? <img src={business.logo} alt={business.name} height="40" />
+        : <span>{business.name}</span>}
+    </a>
+    <nav class="links" aria-label="Main">
+      <ul>
+        {deskLinks.map((l) =>
+          l.href === '#services' && serviceLinks.length ? (
+            <li class="has-dropdown" data-dropdown>
+              <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="services-dropdown" data-dropdown-toggle>
+                {l.label}
+                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>
+              </button>
+              <ul class="dropdown" id="services-dropdown" data-dropdown-panel hidden>
+                {serviceLinks.map((sl) => <li><a href={sl.href}>{sl.label}</a></li>)}
+                <li class="all"><a href="#services">All services</a></li>
+              </ul>
+            </li>
+          ) : (
+            <li><a href={l.href}>{l.label}</a></li>
+          )
+        )}
+      </ul>
+    </nav>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-burger>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  {contact && <a class="contact-box glass" href={contact.href} data-bar>{contact.label}</a>}
+
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile" data-menu>
+    <ul>
+      {links.map((l) =>
+        l.href === '#services' && serviceLinks.length ? (
+          <li class="has-dropdown" data-dropdown>
+            <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="mobile-services" data-dropdown-toggle>
+              {l.label}
+              <svg class="chevron" width="20" height="20" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>
+            </button>
+            <ul class="dropdown" id="mobile-services" data-dropdown-panel hidden>
+              {serviceLinks.map((sl) => <li><a href={sl.href}>{sl.label}</a></li>)}
+              <li class="all"><a href="#services">All services</a></li>
+            </ul>
+          </li>
+        ) : (
+          <li><a href={l.href}>{l.label}</a></li>
+        )
+      )}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  import { initFixedHeader } from './fixed-header.js';
+  document.querySelectorAll('[data-fixed-header]').forEach(initFixedHeader);
+
+  // ---- Services dropdown (desktop bar and phone menu both use this) ----
+  document.querySelectorAll('[data-dropdown]').forEach((wrap) => {
+    const toggle = wrap.querySelector('[data-dropdown-toggle]');
+    const panel = wrap.querySelector('[data-dropdown-panel]');
+    if (!toggle || !panel) return;
+
+    const setOpen = (open) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    };
+    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    // Close after picking a link (Base.astro still handles the smooth glide)
+    panel.addEventListener('click', (e) => {
+      if (e.target.closest('a')) setOpen(false);
+    });
+
+    // Close when clicking anywhere else, or when focus moves out with Tab
+    document.addEventListener('click', (e) => {
+      if (isOpen() && !wrap.contains(e.target)) setOpen(false);
+    });
+    wrap.addEventListener('focusout', (e) => {
+      if (!wrap.contains(e.relatedTarget)) setOpen(false);
+    });
+
+    // Escape closes it and puts focus back on the button. In the phone menu, the first
+    // Escape just closes the Services list; a second one closes the whole menu.
+    wrap.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        e.stopPropagation();
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // Close when the page scrolls, as the header slides away
+    window.addEventListener('scroll', () => { if (isOpen()) setOpen(false); }, { passive: true });
+  });
+</script>
+
+<style>
+  /* The frosted-glass look, shared by the bar and the contact box */
+  .glass {
+    position: fixed; z-index: 100;
+    border-radius: calc(var(--radius) * 2.25);
+    border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    background-color: color-mix(in srgb, var(--paper) 35%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--ink) 18%, transparent);
+    color: var(--ink);
+    transition: background-color .3s ease, box-shadow .3s ease, transform .4s ease;
+  }
+  /* Over the page content: more solid glass so text stays readable */
+  .glass.scrolled {
+    background-color: color-mix(in srgb, var(--paper) 75%, transparent);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+  /* Slide fully off-screen, including the gap above the box */
+  .glass.is-hidden { transform: translateY(calc(-100% - 1.5rem)); }
+
+  .bar {
+    top: 1.25rem; left: 1.25rem;
+    display: flex; align-items: center; gap: 2.5rem;
+    padding: .9rem 1.75rem;
+  }
+
+  .logo {
+    font-family: var(--font-heading); font-weight: var(--heading-weight);
+    font-size: clamp(1.1rem, 4.5vw, 1.5rem); line-height: 1.15; letter-spacing: .05em;
+    text-decoration: none; color: inherit;
+  }
+  .logo img { height: 1.75rem; width: auto; }
+
+  .links ul { list-style: none; display: flex; gap: 1.5rem; margin: 0; padding: 0; }
+  .links a, .contact-box, .mobile-menu a { text-decoration: none; color: inherit; }
+  .links a, .contact-box {
+    font-family: var(--font-heading); font-size: .9rem; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .links a:hover, .logo:hover, .contact-box:hover, .mobile-menu a:hover { color: var(--accent); }
+
+  /* Services dropdown */
+  .has-dropdown { position: relative; }
+  .dropdown-toggle {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: none; border: 0; padding: 0; cursor: pointer; color: inherit;
+    font-family: var(--font-heading); font-size: .9rem; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .dropdown-toggle:hover { color: var(--accent); }
+  .chevron { transition: transform .25s ease; }
+  .dropdown-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+
+  .links .dropdown {
+    position: absolute; top: calc(100% + 1.6rem); left: -1.25rem;
+    display: flex; flex-direction: column; gap: 0;
+    min-width: 14rem; padding: .5rem;
+    border-radius: calc(var(--radius) * 1.5);
+    border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    /* Mostly solid: a blur can't layer over the bar's own blur, so keep it readable */
+    background-color: color-mix(in srgb, var(--paper) 94%, transparent);
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--ink) 16%, transparent);
+    animation: drop-in .2s ease;
+  }
+  .links .dropdown[hidden] { display: none; }
+  .dropdown a {
+    display: block; padding: .65rem .9rem;
+    border-radius: var(--radius);
+    font-family: var(--font-body); font-size: 1rem; letter-spacing: normal; text-transform: none;
+  }
+  .dropdown a:hover, .dropdown a:focus-visible {
+    background-color: color-mix(in srgb, var(--brand) 10%, transparent);
+    color: var(--brand);
+  }
+  .dropdown .all { margin-top: .35rem; padding-top: .35rem; border-top: 1px solid var(--line); }
+  .dropdown .all a { font-family: var(--font-heading); font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; }
+  @keyframes drop-in { from { opacity: 0; transform: translateY(-6px); } }
+
+  .contact-box {
+    top: 1.25rem; right: 1.25rem;
+    display: flex; align-items: center;
+    padding: .9rem 1.75rem;
+    line-height: 1.75rem; /* same height as the bar */
+    white-space: nowrap;
+  }
+
+  /* Menu button (phones only): three lines that turn into a cross */
+  .burger {
+    display: none; justify-self: end;
+    flex-direction: column; gap: 6px;
+    background: none; border: 0; padding: .3rem; cursor: pointer;
+  }
+  .burger span {
+    display: block; width: 28px; height: 3px; background: var(--ink);
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+  /* Full-screen menu, starts off-screen to the right (slid in by fixed-header.js) */
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 90;
+    display: none; flex-direction: column; justify-content: safe center;
+    padding: 6rem 2rem 2rem; /* top room so the open Services list clears the bar */
+    overflow-y: auto; /* scrolls if the open Services list makes it too tall */
+    background-color: var(--paper);
+    transform: translateX(100%);
+    visibility: hidden;
+  }
+  .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 0; padding: 0; }
+  .mobile-menu a {
+    font-family: var(--font-heading); font-weight: var(--heading-weight);
+    font-size: clamp(2rem, 10vw, 2.5rem); line-height: 1.1;
+  }
+
+  /* Services list inside the phone menu: opens in place, smaller and indented */
+  .mobile-menu .dropdown-toggle {
+    gap: .6rem; letter-spacing: normal; text-transform: none;
+    font-weight: var(--heading-weight); font-size: clamp(2rem, 10vw, 2.5rem); line-height: 1.1;
+  }
+  .mobile-menu .dropdown {
+    gap: .25rem; margin-top: 1rem; padding-left: 1rem;
+    border-left: 3px solid var(--accent);
+    animation: drop-in .2s ease;
+  }
+  .mobile-menu .dropdown[hidden] { display: none; }
+  .mobile-menu .dropdown a {
+    display: block; padding: .4rem 0;
+    font-family: var(--font-body); font-weight: 400; font-size: 1.3rem;
+  }
+  .mobile-menu .dropdown .all a {
+    font-family: var(--font-heading); font-size: .9rem; letter-spacing: .1em; text-transform: uppercase;
+  }
+  /* Short divider above "All services" instead of a full-width line */
+  .mobile-menu .dropdown .all { margin-top: .5rem; padding-top: .5rem; border-top: 0; }
+  .mobile-menu .dropdown .all::before {
+    content: ''; display: block; width: 6rem; height: 1px;
+    margin-bottom: .5rem; background: var(--line);
+  }
+
+  /* Phones and tablets: one frosted bar across the top, with a small gap round the edge */
+  @media (max-width: 900px) {
+    .contact-box, .links { display: none; }
+    .bar {
+      top: .75rem; left: .75rem;
+      width: calc(100% - 1.5rem);
+      display: grid; grid-template-columns: 1fr auto; gap: 1rem;
+      padding: .9rem 1.25rem;
+    }
+    .glass.is-hidden { transform: translateY(calc(-100% - 1rem)); }
+    .burger { display: flex; }
+    .mobile-menu { display: flex; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glass, .burger span, .chevron { transition: none; }
+    .links .dropdown, .mobile-menu .dropdown { animation: none; }
+  }
+</style>

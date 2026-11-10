@@ -1,7 +1,6 @@
 ---
 import business from '../../content/business.json';
 import home from '../../content/home.json';
-import theme from '../../config/theme.json';
 
 const h = home.hero;
 const tel = business.phone.replace(/\s+/g, '');
@@ -17,7 +16,6 @@ const tel = business.phone.replace(/\s+/g, '');
           <p class="today" data-today hidden></p>
         </div>
       )}
-      
     </div>
     {h.image && (
       <figure class="photo">

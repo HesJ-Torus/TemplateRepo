@@ -1,12 +1,12 @@
 ---
 // Hero switcher: picks a design using theme.json → layouts.hero.
-// Valid names: "classic" (default).
+// Valid names: "classic" (default), "wide".
 // Unknown or missing names fall back to "classic".
-// To add a design: create src/components/hero/<Name>.astro, import it below,
+// To add a design: create src/components/heroes/<Name>.astro, import it below,
 // add it to `variants`, and add its name to the list above.
 import theme from '../config/theme.json';
-import Classic from './hero/Classic.astro';
-import Wide from './hero/Wide.astro';
+import Classic from './heroes/Classic.astro';
+import Wide from './heroes/Wide.astro';
 
 const variants = {
   classic: Classic,

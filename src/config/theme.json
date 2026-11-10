@@ -16,9 +16,9 @@
   },
   "radius": "6px",
   "layouts": {
-    "_help": "header: classic (default), basic, blurred | hero: classic (default)",
-    "header": "blurred",
-    "hero": "wide"
+    "_help": "header: classic (default), basic, blurred, blurredPlus | hero: classic (default), wide",
+    "header": "blurredPlus",
+    "hero": "classic"
   },
   "sections": {
     "services": true,

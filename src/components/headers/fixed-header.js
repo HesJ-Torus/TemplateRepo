@@ -1,6 +1,6 @@
-// Shared behaviour for the fixed header designs (Basic and Blurred).
+// Shared behaviour for the fixed header designs (Basic, Blurred and BlurredPlus).
 // Each design wraps its markup in an element with `data-fixed-header`, and marks:
-//   data-bar     → the bar(s) that change when you scroll (Blurred also has a contact box)
+//   data-bar     → the bar(s) that change when you scroll (Blurred and BlurredPlus also have a contact box)
 //   data-burger  → the menu button shown on phones
 //   data-menu    → the full-screen mobile menu
 import { gsap } from 'gsap';
@@ -39,7 +39,8 @@ export function initFixedHeader(root) {
 
   // ---- Mobile menu: slides in from the right, links rise in one after another ----
   if (!burger || !menu) return;
-  const items = menu.querySelectorAll('li');
+  // Top-level items only, so a nested list (like BlurredPlus's Services) doesn't join the stagger
+  const items = menu.querySelectorAll(':scope > ul > li');
 
   const menuTween = gsap.timeline({
     paused: true,
@@ -65,7 +66,7 @@ export function initFixedHeader(root) {
       menu.style.visibility = 'visible';
       if (reduceMotion) menuTween.progress(1);
       else menuTween.play();
-      items[0]?.querySelector('a')?.focus({ preventScroll: true });
+      items[0]?.querySelector('a, button')?.focus({ preventScroll: true });
     } else if (reduceMotion) {
       menuTween.progress(0);
       menu.style.visibility = 'hidden';

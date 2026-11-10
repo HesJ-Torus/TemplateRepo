@@ -1,9 +1,9 @@
 ---
 // Header switcher: picks a design using theme.json → layouts.header.
-// Valid names: "classic" (default), "basic", "blurred".
+// Valid names: "classic" (default), "basic", "blurred", "blurredPlus".
 // Unknown or missing names fall back to "classic".
 //
-// Fixed headers (basic, blurred) must sit outside #smooth-wrapper, otherwise
+// Fixed headers (basic, blurred, blurredPlus) must sit outside #smooth-wrapper, otherwise
 // ScrollSmoother would scroll them away with the page. So pages render this twice:
 //   <Header slot="header" placement="fixed" />   → goes before #smooth-wrapper (see Base.astro)
 //   <Header />                                    → goes inside the page as normal
@@ -15,11 +15,13 @@ import theme from '../config/theme.json';
 import Classic from './headers/Classic.astro';
 import Basic from './headers/Basic.astro';
 import Blurred from './headers/Blurred.astro';
+import BlurredPlus from './headers/BlurredPlus.astro';
 
 const variants = {
   classic: { component: Classic, fixed: false },
   basic: { component: Basic, fixed: true, space: '5rem' },
   blurred: { component: Blurred, fixed: true, space: '5.5rem' },
+  blurredPlus: { component: BlurredPlus, fixed: true, space: '5.5rem' },
 };
 
 const chosen = variants[theme.layouts?.header] ?? variants.classic;

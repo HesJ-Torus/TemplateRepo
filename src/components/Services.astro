@@ -1,13 +1,14 @@
 ---
 import home from '../content/home.json';
+import { serviceId } from '../utils/slug.js';
 const s = home.services;
 ---
 <section class="section" id="services">
   <div class="wrap">
     <h2 class="section-head">{s.heading}</h2>
     <dl class="list">
-      {s.items.map((item) => (
-        <div class="row">
+      {s.items.map((item, i) => (
+        <div class="row" id={serviceId(item.title, i)}>
           <dt><h3>{item.title}</h3></dt>
           <dd>{item.description}</dd>
         </div>
