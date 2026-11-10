@@ -15,6 +15,10 @@
     "headingWeight": 700
   },
   "radius": "6px",
+  "layouts": {
+    "_help": "header: classic (default), basic, blurred",
+    "header": "blurred"
+  },
   "sections": {
     "services": true,
     "about": true,

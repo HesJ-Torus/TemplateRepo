@@ -64,7 +64,9 @@ const schema = {
     <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
   </head>
   <body>
-        <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <!-- Fixed headers go here, outside the smooth-scroll wrapper, so they stay put -->
+    <slot name="header" />
     <div id="smooth-wrapper">
       <div id="smooth-content">
         <slot />

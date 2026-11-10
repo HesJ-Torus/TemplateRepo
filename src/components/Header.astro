@@ -1,42 +1,31 @@
 ---
-import business from '../content/business.json';
+// Header switcher: picks a design using theme.json → layouts.header.
+// Valid names: "classic" (default), "basic", "blurred".
+// Unknown or missing names fall back to "classic".
+//
+// Fixed headers (basic, blurred) must sit outside #smooth-wrapper, otherwise
+// ScrollSmoother would scroll them away with the page. So pages render this twice:
+//   <Header slot="header" placement="fixed" />   → goes before #smooth-wrapper (see Base.astro)
+//   <Header />                                    → goes inside the page as normal
+// Each copy only outputs what belongs in its spot:
+//   - a normal header (classic) renders in the page;
+//   - a fixed header renders in the "header" slot, and leaves an empty spacer in the
+//     page so the first section isn't hidden underneath it.
 import theme from '../config/theme.json';
+import Classic from './headers/Classic.astro';
+import Basic from './headers/Basic.astro';
+import Blurred from './headers/Blurred.astro';
 
-const s = theme.sections;
-const links = [
-  s.services && { href: '#services', label: 'Services' },
-  s.about && { href: '#about', label: 'About' },
-  s.gallery && { href: '#work', label: 'Our work' },
-  s.contact && { href: '#contact', label: 'Contact' },
-].filter(Boolean);
-const tel = business.phone.replace(/\s+/g, '');
+const variants = {
+  classic: { component: Classic, fixed: false },
+  basic: { component: Basic, fixed: true, space: '5rem' },
+  blurred: { component: Blurred, fixed: true, space: '5.5rem' },
+};
+
+const chosen = variants[theme.layouts?.header] ?? variants.classic;
+const Variant = chosen.component;
+const { placement = 'inline' } = Astro.props;
 ---
-<header class="site-header">
-  <div class="wrap bar">
-    <a class="brand" href="/">
-      {business.logo
-        ? <img src={business.logo} alt={business.name} height="44" />
-        : <span>{business.name}</span>}
-    </a>
-    <nav aria-label="Main">
-      <ul>
-        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-      </ul>
-    </nav>
-    {business.phone && <a class="call" href={`tel:${tel}`}>Call {business.phone}</a>}
-  </div>
-</header>
-
-<style>
-  .site-header { border-bottom: 1px solid var(--line); background: var(--paper); }
-  .bar { display: flex; align-items: center; gap: 2rem; min-height: 4.75rem; }
-  .brand { font-family: var(--font-heading); font-weight: var(--heading-weight); font-size: 1.25rem; line-height: 1.15; text-decoration: none; letter-spacing: -0.01em; margin-right: auto; }
-  .brand img { height: 44px; width: auto; }
-  nav ul { list-style: none; display: flex; gap: 1.75rem; margin: 0; padding: 0; }
-  nav a { text-decoration: none; font-family: var(--font-heading); font-weight: 500; }
-  .call { font-family: var(--font-heading); font-weight: 600; text-decoration: none; color: var(--brand); white-space: nowrap; }
-  @media (max-width: 760px) {
-    nav { display: none; }
-    .call { font-size: .95rem; }
-  }
-</style>
+{placement === 'fixed' && chosen.fixed && <Variant />}
+{placement === 'inline' && !chosen.fixed && <Variant />}
+{placement === 'inline' && chosen.fixed && <div class="header-space" style={`height:${chosen.space}`} aria-hidden="true"></div>}

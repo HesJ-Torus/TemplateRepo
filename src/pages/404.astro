@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import business from '../content/business.json';
 ---
 <Base title={`Page not found | ${business.name}`}>
+  <Header slot="header" placement="fixed" />
   <Header />
   <main id="main" class="wrap missing">
     <h1>This page doesn't exist</h1>

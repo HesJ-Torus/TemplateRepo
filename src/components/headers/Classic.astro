@@ -1,0 +1,42 @@
+---
+import business from '../../content/business.json';
+import theme from '../../config/theme.json';
+
+const s = theme.sections;
+const links = [
+  s.services && { href: '#services', label: 'Services' },
+  s.about && { href: '#about', label: 'About' },
+  s.gallery && { href: '#work', label: 'Our work' },
+  s.contact && { href: '#contact', label: 'Contact' },
+].filter(Boolean);
+const tel = business.phone.replace(/\s+/g, '');
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/">
+      {business.logo
+        ? <img src={business.logo} alt={business.name} height="44" />
+        : <span>{business.name}</span>}
+    </a>
+    <nav aria-label="Main">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    {business.phone && <a class="call" href={`tel:${tel}`}>Call {business.phone}</a>}
+  </div>
+</header>
+
+<style>
+  .site-header { border-bottom: 1px solid var(--line); background: var(--paper); }
+  .bar { display: flex; align-items: center; gap: 2rem; min-height: 4.75rem; }
+  .brand { font-family: var(--font-heading); font-weight: var(--heading-weight); font-size: 1.25rem; line-height: 1.15; text-decoration: none; letter-spacing: -0.01em; margin-right: auto; }
+  .brand img { height: 44px; width: auto; }
+  nav ul { list-style: none; display: flex; gap: 1.75rem; margin: 0; padding: 0; }
+  nav a { text-decoration: none; font-family: var(--font-heading); font-weight: 500; }
+  .call { font-family: var(--font-heading); font-weight: 600; text-decoration: none; color: var(--brand); white-space: nowrap; }
+  @media (max-width: 760px) {
+    nav { display: none; }
+    .call { font-size: .95rem; }
+  }
+</style>
