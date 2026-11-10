@@ -2,6 +2,7 @@
 import theme from '../config/theme.json';
 import business from '../content/business.json';
 import '../styles/global.css';
+import home from '../content/home.json';
 
 const { title = business.name, description = business.metaDescription } = Astro.props;
 
@@ -26,7 +27,7 @@ const favicon = `data:image/svg+xml,${encodeURIComponent(
 )}`;
 
 const canonical = new URL(Astro.url.pathname, theme.siteUrl).href;
-const ogImage = new URL('/images/hero.svg', theme.siteUrl).href;
+const ogImage = new URL(home.hero.image || '/images/hero.svg', theme.siteUrl).href;
 
 // Structured data so Google understands this is a local business.
 const schema = {
