@@ -30,6 +30,10 @@ content:
       - name: logo
         type: string
         hidden: true
+      - name: favicon
+        label: Browser tab icon (optional)
+        description: The little picture shown in the browser tab and when someone saves your site to their phone. Use a square image, ideally a PNG at least 512 × 512 pixels. Leave empty to show your initials instead.
+        type: image
       - name: phone
         label: Phone number
         type: string
