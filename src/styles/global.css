@@ -39,7 +39,7 @@ a:hover { color: var(--brand); }
 }
 .skip-link:focus { top: 1rem; }
 
-.wrap { width: min(1180px, 100% - 2.5rem); margin-inline: auto; }
+.wrap { width: min(1440px, 100% - 2.5rem); margin-inline: auto; }
 
 .section { padding-block: clamp(4rem, 9vw, 7.5rem); }
 .section + .section { border-top: 1px solid var(--line); }

@@ -39,22 +39,34 @@
       {
         "image": "/images/gallery-1.svg",
         "alt": "Painted sash windows on a Georgian townhouse",
-        "caption": "Sash windows, Ludlow"
+        "caption": "Sash windows, Ludlow",
+        "description": "Six sash windows restored and repainted, keeping the original glass.",
+        "link": "https://example.co.uk",
+        "linkText": ""
       },
       {
         "image": "/images/gallery-2.svg",
         "alt": "Oak kitchen with a butler sink",
-        "caption": "Oak kitchen, Clee St Margaret"
+        "caption": "Oak kitchen, Clee St Margaret",
+        "description": "A handmade oak kitchen built around a reclaimed butler sink.",
+        "link": "https://example.co.uk",
+        "linkText": ""
       },
       {
         "image": "/images/gallery-3.svg",
         "alt": "Green stable door on a farmhouse",
-        "caption": "Stable door, Diddlebury"
+        "caption": "Stable door, Diddlebury",
+        "description": "A ledged and braced stable door, made to fit an old opening.",
+        "link": "https://example.co.uk",
+        "linkText": ""
       },
       {
         "image": "/images/gallery-4.svg",
         "alt": "Oak staircase with turned spindles",
-        "caption": "Staircase, Bridgnorth"
+        "caption": "Staircase, Bridgnorth",
+        "description": "A new oak staircase with hand-turned spindles.",
+        "link": "https://example.co.uk",
+        "linkText": ""
       }
     ]
   },

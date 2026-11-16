@@ -3,6 +3,7 @@
 //   data-bar     → the bar(s) that change when you scroll (Blurred and BlurredPlus also have a contact box)
 //   data-burger  → the menu button shown on phones
 //   data-menu    → the full-screen mobile menu
+//   data-menu-always (optional, on the root) → the menu is used on desktop too
 import { gsap } from 'gsap';
 import { ScrollSmoother } from 'gsap/ScrollSmoother';
 
@@ -49,6 +50,19 @@ export function initFixedHeader(root) {
     .to(menu, { x: 0, duration: 0.7, ease: 'power1.inOut' })
     .from(items, { y: 30, opacity: 0, stagger: 0.08, duration: 0.4 }, '-=0.2');
 
+  // Scroll lock without hiding the scrollbar: ignore wheel/touch outside the menu, and
+  // snap back if the page moves anyway (dragging the scrollbar, arrow keys).
+  let lockedY = 0;
+  const blockOutsideMenu = (e) => { if (!menu.contains(e.target)) e.preventDefault(); };
+  const holdPosition = () => { if (window.scrollY !== lockedY) window.scrollTo(0, lockedY); };
+  function lockScroll(lock) {
+    const method = lock ? 'addEventListener' : 'removeEventListener';
+    if (lock) lockedY = window.scrollY;
+    window[method]('wheel', blockOutsideMenu, { passive: false });
+    window[method]('touchmove', blockOutsideMenu, { passive: false });
+    window[method]('scroll', holdPosition);
+  }
+
   function setMenu(next) {
     if (next === open) return;
     open = next;
@@ -56,9 +70,11 @@ export function initFixedHeader(root) {
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
 
-    // Stop the page scrolling behind the menu, and stop Tab reaching the page behind it
-    ScrollSmoother.get()?.paused(open);
-    document.documentElement.style.overflow = open ? 'hidden' : '';
+    // Stop the page scrolling behind the menu, and stop Tab reaching the page behind it.
+    // The scrollbar stays visible (so the page doesn't jump sideways); it just won't move.
+    const smoother = ScrollSmoother.get();
+    if (smoother) smoother.paused(open); // blocks page scrolling but lets the menu scroll
+    else lockScroll(open);               // no ScrollSmoother (reduced motion): do it ourselves
     document.getElementById('smooth-wrapper')?.toggleAttribute('inert', open);
 
     if (open) {
@@ -90,8 +106,11 @@ export function initFixedHeader(root) {
     }
   });
 
-  // If the window is widened to desktop size while the menu is open, close it
-  window.matchMedia('(min-width: 901px)').addEventListener('change', (e) => {
-    if (e.matches) setMenu(false);
-  });
+  // If the window is widened to desktop size while the menu is open, close it.
+  // Skipped for headers that use the menu at every size (data-menu-always, e.g. BlurredMinimal).
+  if (!('menuAlways' in root.dataset)) {
+    window.matchMedia('(min-width: 901px)').addEventListener('change', (e) => {
+      if (e.matches) setMenu(false);
+    });
+  }
 }

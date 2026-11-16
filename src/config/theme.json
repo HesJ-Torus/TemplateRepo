@@ -16,9 +16,10 @@
   },
   "radius": "6px",
   "layouts": {
-    "_help": "header: classic (default), basic, blurred, blurredPlus | hero: classic (default), wide",
+    "_help": "header: classic (default), basic, blurred, blurredPlus, blurredMinimal | hero: classic (default), wide, statement | gallery: grid (default), 2x",
     "header": "blurredPlus",
-    "hero": "classic"
+    "hero": "classic",
+    "gallery": "grid"
   },
   "sections": {
     "services": true,

@@ -16,7 +16,7 @@ const cssVars = `
   --paper:${c.paper}; --ink:${c.ink}; --brand:${c.brand}; --accent:${c.accent};
   --line:${c.line}; --on-brand:${c.onBrand}; --radius:${theme.radius};
   --font-heading:'${theme.fonts.heading}', system-ui, sans-serif;
-  --font-body:'${theme.fonts.body}', Georgia, serif;
+  --font-body:'${theme.fonts.body}', ${theme.fonts.bodyFallback || 'Georgia, serif'};
   --heading-weight:${theme.fonts.headingWeight};
 `;
 

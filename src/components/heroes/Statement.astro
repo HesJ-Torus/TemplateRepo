@@ -1,0 +1,39 @@
+---
+// "statement" hero. Big centred statement: no photo, just a very large heading, the intro and a button,
+// centred in a (nearly) full-screen block.
+import home from '../../content/home.json';
+import theme from '../../config/theme.json';
+
+const h = home.hero;
+---
+<section class="hero">
+  <div class="wrap inner">
+    <h1>{h.heading}</h1>
+    {h.intro && <p class="intro">{h.intro}</p>}
+    {theme.sections.contact && h.buttonText && <a class="button" href="#contact">{h.buttonText}</a>}
+  </div>
+</section>
+
+<style>
+  .hero {
+    /* Nearly full screen: leaves room for the header above */
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding-block: clamp(3rem, 8vw, 6rem);
+    text-align: center;
+  }
+  .inner { display: flex; flex-direction: column; align-items: center; }
+  h1 {
+    font-size: clamp(2.25rem, 7.5vw, 5.75rem);
+    line-height: 1;
+    text-transform: uppercase;
+    max-width: 16ch;
+    overflow-wrap: break-word;
+  }
+  .intro {
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    margin: clamp(1.5rem, 3vw, 2.25rem) auto 0;
+    max-width: 46ch;
+  }
+  .button { margin-top: clamp(2rem, 4vw, 3rem); }
+</style>

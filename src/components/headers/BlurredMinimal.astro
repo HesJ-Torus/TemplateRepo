@@ -1,0 +1,225 @@
+---
+// "blurredMinimal" header: one frosted-glass bar across the top with just the logo and a
+// menu button, on every screen size. The button opens a full-screen menu, where
+// "Services" opens a list of each service from home.json. The bar slides away when you
+// scroll down and returns when you scroll up. Rendered outside #smooth-wrapper
+// (see Header.astro).
+import business from '../../content/business.json';
+import home from '../../content/home.json';
+import theme from '../../config/theme.json';
+import { serviceId } from '../../utils/slug.js';
+
+const s = theme.sections;
+// Services list entries: one per service, linking to its row in the Services section
+const serviceLinks = (home.services?.items ?? [])
+  .filter((item) => item.title)
+  .map((item, i) => ({ href: `#${serviceId(item.title, i)}`, label: item.title }));
+const links = [
+  s.services && { href: '#services', label: 'Services' },
+  s.about && { href: '#about', label: 'About' },
+  s.gallery && { href: '#work', label: 'Our work' },
+  s.contact && { href: '#contact', label: 'Contact' },
+].filter(Boolean);
+---
+<header class="site-header" data-fixed-header data-menu-always>
+  <div class="bar glass" data-bar>
+    <a class="logo" href="/">
+      {business.logo
+        ? <img src={business.logo} alt={business.name} height="40" />
+        : <span>{business.name}</span>}
+    </a>
+    <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu" data-burger>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="menu" id="site-menu" aria-label="Main" data-menu>
+    <ul>
+      {links.map((l) =>
+        l.href === '#services' && serviceLinks.length ? (
+          <li class="has-dropdown" data-dropdown>
+            <button class="dropdown-toggle" type="button" aria-expanded="false" aria-controls="menu-services" data-dropdown-toggle>
+              {l.label}
+              <svg class="chevron" width="20" height="20" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>
+            </button>
+            <ul class="dropdown" id="menu-services" data-dropdown-panel hidden>
+              {serviceLinks.map((sl) => <li><a href={sl.href}>{sl.label}</a></li>)}
+              <li class="all"><a href="#services">All services</a></li>
+            </ul>
+          </li>
+        ) : (
+          <li><a href={l.href}>{l.label}</a></li>
+        )
+      )}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  import { initFixedHeader } from './fixed-header.js';
+  document.querySelectorAll('[data-fixed-header]').forEach(initFixedHeader);
+
+  // ---- Services list inside the menu ----
+  document.querySelectorAll('[data-dropdown]').forEach((wrap) => {
+    const toggle = wrap.querySelector('[data-dropdown-toggle]');
+    const panel = wrap.querySelector('[data-dropdown-panel]');
+    if (!toggle || !panel) return;
+
+    const setOpen = (open) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    };
+    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    // Close after picking a link (Base.astro still handles the smooth glide)
+    panel.addEventListener('click', (e) => {
+      if (e.target.closest('a')) setOpen(false);
+    });
+
+    // The first Escape just closes the Services list; a second one closes the whole menu
+    wrap.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        e.stopPropagation();
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  });
+</script>
+
+<style>
+  /* The frosted-glass bar */
+  .glass {
+    position: fixed; z-index: 100;
+    border-radius: calc(var(--radius) * 2.25);
+    border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    background-color: color-mix(in srgb, var(--paper) 35%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--ink) 18%, transparent);
+    color: var(--ink);
+    transition: background-color .3s ease, box-shadow .3s ease, transform .4s ease;
+  }
+  /* Over the page content: more solid glass so text stays readable */
+  .glass.scrolled {
+    background-color: color-mix(in srgb, var(--paper) 75%, transparent);
+    box-shadow: 0 8px 30px color-mix(in srgb, var(--ink) 10%, transparent);
+  }
+  /* Slide fully off-screen, including the gap above the bar */
+  .glass.is-hidden { transform: translateY(calc(-100% - 1.5rem)); }
+
+  /* One bar across the top, with a gap round the edge (bigger on wide screens) */
+  .bar {
+    --edge: clamp(.75rem, 2vw, 1.25rem);
+    top: var(--edge); left: var(--edge);
+    width: calc(100% - var(--edge) * 2);
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    padding: .9rem clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  /* On PC: the bar splits into two separate glass pills (logo left, menu button right)
+     with clear space between them. The bar itself becomes an invisible holder that
+     still does the scroll hide/show; clicks in the empty middle pass through to the page. */
+  @media (min-width: 901px) {
+    .bar.glass {
+      align-items: stretch;
+      padding: 0;
+      background: none; border-color: transparent; box-shadow: none;
+      -webkit-backdrop-filter: none; backdrop-filter: none;
+      pointer-events: none;
+    }
+    .bar > * {
+      pointer-events: auto;
+      display: flex; align-items: center;
+      padding: .9rem clamp(1.25rem, 2.5vw, 1.75rem);
+      border-radius: calc(var(--radius) * 2.25);
+      border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+      background-color: color-mix(in srgb, var(--paper) 35%, transparent);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      backdrop-filter: blur(14px) saturate(140%);
+      box-shadow: 0 8px 30px color-mix(in srgb, var(--ink) 18%, transparent);
+      transition: background-color .3s ease, box-shadow .3s ease, color .2s ease;
+    }
+    .bar.scrolled > * {
+      background-color: color-mix(in srgb, var(--paper) 75%, transparent);
+      box-shadow: 0 8px 30px color-mix(in srgb, var(--ink) 10%, transparent);
+    }
+    .burger { justify-content: center; }
+  }
+
+  .logo {
+    font-family: var(--font-heading); font-weight: var(--heading-weight);
+    font-size: clamp(1.1rem, 4.5vw, 1.5rem); line-height: 1.15; letter-spacing: .05em;
+    text-decoration: none; color: inherit;
+  }
+  .logo img { height: 1.75rem; width: auto; }
+  .logo:hover { color: var(--accent); }
+
+  /* Menu button: three lines that turn into a cross */
+  .burger {
+    display: flex; flex-direction: column; gap: 6px;
+    background: none; border: 0; padding: .3rem; cursor: pointer;
+  }
+  .burger span {
+    display: block; width: 28px; height: 3px; background: var(--ink);
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+  /* Full-screen menu, starts off-screen to the right (slid in by fixed-header.js) */
+  .menu {
+    position: fixed; inset: 0; z-index: 90;
+    display: flex; flex-direction: column; justify-content: safe center;
+    padding: 6rem clamp(2rem, 8vw, 8rem) 2rem; /* top room so the open Services list clears the bar */
+    overflow-y: auto; /* scrolls if the open Services list makes it too tall */
+    background-color: var(--paper);
+    transform: translateX(100%);
+    visibility: hidden;
+  }
+  .menu ul { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 0; padding: 0; }
+  .menu a { text-decoration: none; color: inherit; }
+  .menu a:hover { color: var(--accent); }
+  .menu > ul > li > a, .dropdown-toggle {
+    font-family: var(--font-heading); font-weight: var(--heading-weight);
+    font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.1;
+  }
+
+  /* Services list: opens in place, smaller and indented */
+  .dropdown-toggle {
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: none; border: 0; padding: 0; cursor: pointer; color: inherit;
+  }
+  .dropdown-toggle:hover { color: var(--accent); }
+  .chevron { transition: transform .25s ease; }
+  .dropdown-toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+
+  .menu .dropdown {
+    gap: .25rem; margin-top: 1rem; padding-left: 1rem;
+    border-left: 3px solid var(--accent);
+    animation: drop-in .2s ease;
+  }
+  .menu .dropdown[hidden] { display: none; }
+  .dropdown a {
+    display: block; padding: .4rem 0;
+    font-family: var(--font-body); font-weight: 400; font-size: 1.3rem;
+  }
+  .dropdown .all a {
+    font-family: var(--font-heading); font-size: .9rem; letter-spacing: .1em; text-transform: uppercase;
+  }
+  /* Short divider above "All services" */
+  .dropdown .all { margin-top: .5rem; padding-top: .5rem; }
+  .dropdown .all::before {
+    content: ''; display: block; width: 6rem; height: 1px;
+    margin-bottom: .5rem; background: var(--line);
+  }
+  @keyframes drop-in { from { opacity: 0; transform: translateY(-6px); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glass, .bar > *, .burger span, .chevron { transition: none; }
+    .menu .dropdown { animation: none; }
+  }
+</style>

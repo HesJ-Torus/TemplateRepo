@@ -142,7 +142,19 @@ content:
                 label: Describe the photo
                 type: string
               - name: caption
-                label: Caption (optional)
+                label: Title / caption (optional)
+                type: string
+              - name: description
+                label: Short description (optional)
+                description: A sentence or two about this job. Only shown on some gallery designs.
+                type: text
+              - name: link
+                label: Link to visit (optional)
+                description: A full web address, starting with https://. Leave empty to hide the button.
+                type: string
+              - name: linkText
+                label: Button wording (optional)
+                description: Leave empty to use "Visit site".
                 type: string
       - name: reviews
         label: Customer reviews

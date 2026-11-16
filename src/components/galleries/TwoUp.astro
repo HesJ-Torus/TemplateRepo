@@ -1,0 +1,63 @@
+---
+// "2x" gallery: two large photos side by side per row, so each piece of work gets
+// plenty of room. Photos show at 16:9 (desktop-screen shape, e.g. 1920 x 1080).
+// Under each photo: the title (caption) and a short description on the left, and a
+// "Visit" button on the right (hidden if there's no link). Drops to one photo per row
+// on phones, where the button moves underneath the text.
+import home from '../../content/home.json';
+const g = home.gallery;
+---
+<section class="section" id="work">
+  <div class="wrap">
+    <h2 class="section-head">{g.heading}</h2>
+    <div class="grid">
+      {g.images.map((img) => (
+        <figure>
+          <img src={img.image} alt={img.alt} width="1920" height="1080" loading="lazy" />
+          {(img.caption || img.description || img.link) && (
+            <figcaption>
+              <div class="text">
+                {img.caption && <h3 class="title">{img.caption}</h3>}
+                {img.description && <p class="desc">{img.description}</p>}
+              </div>
+              {img.link && (
+                <a class="button visit" href={img.link} target="_blank" rel="noopener">
+                  {img.linkText || 'Visit site'}
+                  {img.caption && <span class="visually-hidden">: {img.caption}</span>}
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 10L10 4M5 4h5v5" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>
+                </a>
+              )}
+            </figcaption>
+          )}
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  @media (min-width: 700px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  figure { margin: 0; }
+  img {
+    width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+    border-radius: var(--radius);
+  }
+  /* Text on the left, button on the right; the button wraps underneath when space runs out */
+  figcaption {
+    margin-top: 1rem;
+    display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between;
+    gap: 1rem 1.5rem;
+  }
+  .text { flex: 1 1 18rem; min-width: 0; }
+  .title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.25; margin: 0; }
+  .desc { margin: .35rem 0 0; max-width: 55ch; }
+  .visit { flex-shrink: 0; }
+</style>
