@@ -25,7 +25,7 @@ const links = [
 
 // Desktop: "Contact" lives in its own box, so leave it out of the main links
 const deskLinks = links.filter((l) => l.href !== '#contact');
-const tel = business.phone.replace(/\s+/g, '');
+const tel = (business.phone ?? '').replace(/\s+/g, '');
 // Contact box goes to the contact section, or rings the phone if that section is off
 const contact = s.contact
   ? { href: '#contact', label: 'Contact' }

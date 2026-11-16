@@ -3,7 +3,7 @@ import business from '../content/business.json';
 import home from '../content/home.json';
 import theme from '../config/theme.json';
 
-const c = home.contact;
+const c = home.contact ?? {};
 const action = theme.contactForm.action;
 const tel = (business.phone ?? "").replace(/\s+/g, '');
 ---

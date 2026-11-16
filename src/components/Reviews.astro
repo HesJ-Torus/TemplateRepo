@@ -1,6 +1,6 @@
 ---
 import home from '../content/home.json';
-const r = home.reviews;
+const r = home.reviews ?? {};
 ---
 {(r.items ?? []).length > 0 && (
   <section class="section" id="reviews">

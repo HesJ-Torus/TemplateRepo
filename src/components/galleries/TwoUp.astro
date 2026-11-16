@@ -5,7 +5,7 @@
 // "Visit" button on the right (hidden if there's no link). Drops to one photo per row
 // on phones, where the button moves underneath the text.
 import home from '../../content/home.json';
-const g = home.gallery;
+const g = home.gallery ?? {};
 ---
 <section class="section" id="work">
   <div class="wrap">

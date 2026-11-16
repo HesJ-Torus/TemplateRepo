@@ -28,7 +28,8 @@ This repo is a reusable template for small-business brochure websites, built wit
 7. **Sections can be toggled.** New sections get an on/off flag in `theme.json` → `sections` and are conditionally rendered in `src/pages/index.astro`. Hide a section's nav link when it is off.
 8. **Animation:** GSAP is installed and ScrollSmoother wraps the page in `Base.astro` (`#smooth-wrapper` / `#smooth-content`). Always respect `prefers-reduced-motion`. Fixed or sticky elements must sit outside `#smooth-wrapper`. Keep motion subtle: one considered entrance beats animating everything. Follow the GSAP skills in .claude/skills for GSAP best practice.
 9. **Accessibility and quality floor:** responsive down to 360px wide, visible keyboard focus, alt text fields for every image, real `<button>`/`<a>` elements, sensible heading order (one `h1` per page).
-10. **Check your work:** run `npm run build` after changes and fix any errors before finishing. Don't commit or push unless asked.
+10. **Never assume content exists.** Pages CMS deletes any field, list or group a client leaves empty when they save. Read content with fallbacks, e.g. `home.about ?? {}`, `(list ?? []).map(...)`, `(text ?? '').split(...)`, `obj?.field`. Only `business.name` is guaranteed (it is `required` in `.pages.yml`).
+11. **Check your work:** run `npm run build` and `npm run check-empty` after changes and fix any errors before finishing. `check-empty` builds a throwaway copy of the site with every content field removed, so it catches crashes before a client's edit does. Don't commit or push unless asked.
 
 ## Workflow notes
 

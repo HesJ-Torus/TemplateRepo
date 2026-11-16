@@ -9,7 +9,7 @@ const links = [
   s.gallery && { href: '#work', label: 'Our work' },
   s.contact && { href: '#contact', label: 'Contact' },
 ].filter(Boolean);
-const tel = business.phone.replace(/\s+/g, '');
+const tel = (business.phone ?? '').replace(/\s+/g, '');
 ---
 <header class="site-header">
   <div class="wrap bar">

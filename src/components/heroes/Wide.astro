@@ -2,8 +2,8 @@
 import business from '../../content/business.json';
 import home from '../../content/home.json';
 
-const h = home.hero;
-const tel = business.phone.replace(/\s+/g, '');
+const h = home.hero ?? {};
+const tel = (business.phone ?? '').replace(/\s+/g, '');
 ---
 <section class="hero">
   <div class="wrap grid">

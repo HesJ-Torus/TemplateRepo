@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "new-client": "node scripts/new-client.mjs"
+    "new-client": "node scripts/new-client.mjs",
+    "check-empty": "node scripts/check-empty.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
