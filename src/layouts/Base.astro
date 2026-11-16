@@ -7,15 +7,19 @@ import home from '../content/home.json';
 const { title = business.name, description = business.metaDescription } = Astro.props;
 
 const c = theme.colors;
+// Fonts already installed on visitors' computers. These aren't on Google Fonts,
+// so they're skipped when building the Google Fonts link (an unknown name breaks the whole request).
+const systemFonts = ['impact', 'arial', 'arial narrow', 'helvetica', 'georgia', 'times new roman', 'verdana', 'tahoma', 'trebuchet ms', 'system-ui', 'sans-serif', 'serif'];
 const fontFamilies = [...new Set([theme.fonts.heading, theme.fonts.body])]
+  .filter((f) => !systemFonts.includes(f.toLowerCase()))
   .map((f) => `family=${encodeURIComponent(f)}:wght@400;500;600;700`)
   .join('&');
-const fontsUrl = `https://fonts.googleapis.com/css2?${fontFamilies}&display=swap`;
+const fontsUrl = fontFamilies ? `https://fonts.googleapis.com/css2?${fontFamilies}&display=swap` : null;
 
 const cssVars = `
   --paper:${c.paper}; --ink:${c.ink}; --brand:${c.brand}; --accent:${c.accent};
   --line:${c.line}; --on-brand:${c.onBrand}; --radius:${theme.radius};
-  --font-heading:'${theme.fonts.heading}', system-ui, sans-serif;
+  --font-heading:'${theme.fonts.heading}', ${theme.fonts.headingFallback || 'system-ui, sans-serif'};
   --font-body:'${theme.fonts.body}', ${theme.fonts.bodyFallback || 'Georgia, serif'};
   --heading-weight:${theme.fonts.headingWeight};
 `;
@@ -64,9 +68,13 @@ const schema = {
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="theme-color" content={c.brand} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={fontsUrl} />
+    {fontsUrl && (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href={fontsUrl} />
+      </>
+    )}
     <style set:html={`:root{${cssVars}}`}></style>
     <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
   </head>

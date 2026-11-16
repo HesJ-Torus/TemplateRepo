@@ -10,7 +10,8 @@
     "onBrand": "#FFFFFF"
   },
   "fonts": {
-    "heading": "Bricolage Grotesque",
+    "heading": "Montserrat",
+    "headingFallback": "\"Helvetica Neue\", Arial, sans-serif",
     "body": "Literata",
     "headingWeight": 700
   },
@@ -34,7 +35,7 @@
   },
   "credit": {
     "show": true,
-    "text": "Website by SpencerJonesDesign",
+    "text": "SpencerJones WebDesign",
     "url": "https://example.co.uk"
   }
 }
