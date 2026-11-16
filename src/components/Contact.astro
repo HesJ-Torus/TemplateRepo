@@ -5,7 +5,7 @@ import theme from '../config/theme.json';
 
 const c = home.contact;
 const action = theme.contactForm.action;
-const tel = business.phone.replace(/\s+/g, '');
+const tel = (business.phone ?? "").replace(/\s+/g, '');
 ---
 <section class="section contact" id="contact">
   <div class="wrap grid">
@@ -18,11 +18,11 @@ const tel = business.phone.replace(/\s+/g, '');
         {business.address && <li><span>Address</span>{business.address}</li>}
         {business.area && <li><span>Areas we cover</span>{business.area}</li>}
       </ul>
-      {action && business.hours.length > 0 && (
+      {action && (business.hours ?? []).length > 0 && (
         <table class="hours">
           <caption>Opening hours</caption>
           <tbody>
-            {business.hours.map((h) => <tr><th scope="row">{h.day}</th><td>{h.times}</td></tr>)}
+            {(business.hours ?? []).map((h) => <tr><th scope="row">{h.day}</th><td>{h.times}</td></tr>)}
           </tbody>
         </table>
       )}
@@ -39,11 +39,11 @@ const tel = business.phone.replace(/\s+/g, '');
       </form>
     ) : (
       <div class="hours-panel">
-        {business.hours.length > 0 && (
+        {(business.hours ?? []).length > 0 && (
         <table class="hours">
           <caption>Opening hours</caption>
           <tbody>
-            {business.hours.map((h) => <tr><th scope="row">{h.day}</th><td>{h.times}</td></tr>)}
+            {(business.hours ?? []).map((h) => <tr><th scope="row">{h.day}</th><td>{h.times}</td></tr>)}
           </tbody>
         </table>
       )}

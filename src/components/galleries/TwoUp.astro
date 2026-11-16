@@ -11,7 +11,7 @@ const g = home.gallery;
   <div class="wrap">
     <h2 class="section-head">{g.heading}</h2>
     <div class="grid">
-      {g.images.map((img) => (
+      {(g.images ?? []).map((img) => (
         <figure>
           <img src={img.image} alt={img.alt} width="1920" height="1080" loading="lazy" />
           {(img.caption || img.description || img.link) && (

@@ -2,12 +2,12 @@
 import home from '../content/home.json';
 const r = home.reviews;
 ---
-{r.items.length > 0 && (
+{(r.items ?? []).length > 0 && (
   <section class="section" id="reviews">
     <div class="wrap">
       <h2 class="section-head">{r.heading}</h2>
       <div class="grid">
-        {r.items.map((item) => (
+        {(r.items ?? []).map((item) => (
           <figure>
             <blockquote><p>{item.quote}</p></blockquote>
             <figcaption>{item.name}</figcaption>

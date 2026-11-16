@@ -1,7 +1,7 @@
 ---
 import home from '../content/home.json';
 const a = home.about;
-const paragraphs = a.body.split(/\n\s*\n/).filter(Boolean);
+const paragraphs = (a.body ?? "").split(/\n\s*\n/).filter(Boolean);
 ---
 <section class="section" id="about">
   <div class="wrap grid">

@@ -49,7 +49,7 @@ const schema = {
   address: business.address,
   areaServed: business.area,
   url: theme.siteUrl,
-  openingHours: business.hours.map((h) => `${h.day}: ${h.times}`),
+  openingHours: (business.hours ?? []).map((h) => `${h.day}: ${h.times}`),
 };
 ---
 <!doctype html>
